@@ -1,0 +1,35 @@
+package com.anderson.crewchat.ui
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.anderson.crewchat.BaseFragment
+import com.anderson.crewchat.R
+import com.anderson.crewchat.databinding.FragmentSplashBinding
+import com.anderson.crewchat.viewmodel.SplashViewModel
+
+class SplashFragment : BaseFragment<SplashViewModel, FragmentSplashBinding>(R.layout.fragment_splash) {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentSplashBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override lateinit var binding: FragmentSplashBinding
+    override val viewModel by viewModels<SplashViewModel>()
+    override fun initEvents() {
+
+    }
+
+    override fun initViewModels() {
+
+    }
+
+}

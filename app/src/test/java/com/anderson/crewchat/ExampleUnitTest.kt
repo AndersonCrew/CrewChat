@@ -1,4 +1,4 @@
-package com.anderson.myapplication
+package com.anderson.crewchat
 
 import org.junit.Test
 

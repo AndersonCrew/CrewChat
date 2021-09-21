@@ -1,13 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.anderson.myapplication"
+        applicationId "com.anderson.crewchat"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -22,9 +25,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding = true
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -37,7 +44,44 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    //lifecycle
+    def viewModel_version = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$viewModel_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$viewModel_version"
+
+    //Navigation
+    def navigation_version = "2.3.5"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    //Room
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    //Coroutine
+    def coroutine_version = "1.5.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+
+    //dagger-hilt
+    def dagger_hilt_version = "2.33-beta"
+    def hilt_androidx = "1.0.0-beta01"
+    implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$dagger_hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    kapt "androidx.hilt:hilt-compiler:$hilt_androidx"
+
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.okhttp3:okhttp:4.7.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 }
