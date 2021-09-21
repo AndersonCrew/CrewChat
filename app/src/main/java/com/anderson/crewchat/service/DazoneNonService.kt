@@ -5,6 +5,7 @@ import com.anderson.crewchat.model.SSL
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.POST
 
-interface DazoneService {
-
+interface DazoneNonService {
+    @POST("SSL_Check")
+    suspend fun checkSSL(): Flow<BaseResponse<SSL>>
 }

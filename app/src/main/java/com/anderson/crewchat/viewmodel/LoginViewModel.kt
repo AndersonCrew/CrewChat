@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.anderson.crewchat.BaseViewModel
 import com.anderson.crewchat.model.User
 import com.anderson.crewchat.repository.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: LoginRepository) :
     BaseViewModel() {
 
@@ -17,4 +19,8 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
     }
 
     fun getUser() = repository.getUser().asLiveData()
+
+    fun checkSSL() = viewModelScope.launch {
+        repository.checkSSL().asLiveData()
+    }
 }

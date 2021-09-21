@@ -12,6 +12,4 @@ class User(
     val userName: String,
     val password: String
 
-) : Serializable {
-
-}
+)

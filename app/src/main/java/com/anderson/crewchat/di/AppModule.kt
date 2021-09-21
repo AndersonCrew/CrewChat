@@ -1,8 +1,14 @@
 package com.anderson.crewchat.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.Room
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.anderson.crewchat.db.DazoneDatabase
+import com.anderson.crewchat.service.DazoneNonService
 import com.anderson.crewchat.service.DazoneService
 import com.anderson.crewchat.utils.Config
 import com.anderson.crewchat.utils.Constants
@@ -23,6 +29,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    /**
+    * Database
+    * */
+
     @Singleton
     @Provides
     fun provideDazoneDatabase(
@@ -39,8 +49,22 @@ object AppModule {
         db: DazoneDatabase
     ) = db.userDao()
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @Singleton
+    @Provides
+    fun provideSharePreference(@ApplicationContext context: Context): SharedPreferences = EncryptedSharedPreferences.create(
+        Constants.DAZONE_SHARE_PREF_NAME,
+        MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+        context,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
 
-    //    Network
+
+    /**
+     * Network
+     */
+
 
     @Singleton
     @Provides
@@ -57,14 +81,30 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    @Retrofit1
+    fun provideRetrofit(okHttpClient: OkHttpClient, mPref: SharedPreferences): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(Config.BASE_URL)
+        .baseUrl(mPref.getString(Constants.DAZONE_DB_NAME, "")?: "")
+        .client(okHttpClient)
+        .build()
+
+
+    @Singleton
+    @Provides
+    @Retrofit2
+    fun provideRetrofit2(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(Config.NON_BASE_URL)
         .client(okHttpClient)
         .build()
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): DazoneService = retrofit.create(DazoneService::class.java)
+    fun provideApiService(@Retrofit1 retrofit: Retrofit): DazoneService = retrofit.create(DazoneService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideNonApiService(@Retrofit2 retrofit: Retrofit): DazoneNonService = retrofit.create(DazoneNonService::class.java)
 
 }
+

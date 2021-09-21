@@ -6,9 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-abstract class BaseFragment<VM: BaseViewModel, VB: ViewBinding>(resId: Int): Fragment(resId) {
-    protected abstract var binding: VB
+abstract class BaseFragment<VM: BaseViewModel, VB: ViewBinding>: Fragment() {
+    protected abstract var binding: VB?
     protected abstract val viewModel: VM
     protected abstract fun initEvents()
     protected abstract fun initViewModels()

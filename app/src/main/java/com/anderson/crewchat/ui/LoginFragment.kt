@@ -11,17 +11,17 @@ import com.anderson.crewchat.R
 import com.anderson.crewchat.databinding.FragmentLoginBinding
 import com.anderson.crewchat.viewmodel.LoginViewModel
 
-class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding>(R.layout.fragment_login) {
+class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding>() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
-    override lateinit var binding: FragmentLoginBinding
+    override var binding: FragmentLoginBinding?= null
     override val viewModel by viewModels<LoginViewModel>()
 
     override fun initEvents() {
